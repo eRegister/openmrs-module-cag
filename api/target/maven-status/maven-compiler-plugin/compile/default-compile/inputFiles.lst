@@ -1,0 +1,12 @@
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/api/db/hibernate/HibernateCagDao.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/cag/CagEncounter.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/CagConfig.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/api/db/CagDao.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/cag/Cag.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/CagActivator.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/api/impl/CagServiceImpl.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/cag/CagVisit.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/cag/CagVisitVisit.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/api/CagService.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/cag/CagPatient.java
+/home/moletsane/Workspace/openmrs-module-cag/api/src/main/java/org/openmrs/module/cag/cag/Absentee.java

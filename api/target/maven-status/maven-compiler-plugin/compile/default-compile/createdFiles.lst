@@ -1,0 +1,12 @@
+org/openmrs/module/cag/cag/CagEncounter.class
+org/openmrs/module/cag/cag/Absentee.class
+org/openmrs/module/cag/cag/CagVisit.class
+org/openmrs/module/cag/api/impl/CagServiceImpl.class
+org/openmrs/module/cag/CagActivator.class
+org/openmrs/module/cag/cag/Cag.class
+org/openmrs/module/cag/api/db/hibernate/HibernateCagDao.class
+org/openmrs/module/cag/CagConfig.class
+org/openmrs/module/cag/api/CagService.class
+org/openmrs/module/cag/api/db/CagDao.class
+org/openmrs/module/cag/cag/CagVisitVisit.class
+org/openmrs/module/cag/cag/CagPatient.class
