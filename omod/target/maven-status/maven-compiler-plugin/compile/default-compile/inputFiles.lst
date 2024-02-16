@@ -1,0 +1,6 @@
+/home/moletsane/Workspace/openmrs-module-cag/omod/src/main/java/org/openmrs/module/cag/web/resource/CagEncounterResource.java
+/home/moletsane/Workspace/openmrs-module-cag/omod/src/main/java/org/openmrs/module/cag/web/resource/CagResource.java
+/home/moletsane/Workspace/openmrs-module-cag/omod/src/main/java/org/openmrs/module/cag/web/resource/CagPatientResource.java
+/home/moletsane/Workspace/openmrs-module-cag/omod/src/main/java/org/openmrs/module/cag/extension/html/AdminList.java
+/home/moletsane/Workspace/openmrs-module-cag/omod/src/main/java/org/openmrs/module/cag/web/controller/CagController.java
+/home/moletsane/Workspace/openmrs-module-cag/omod/src/main/java/org/openmrs/module/cag/web/resource/CagVisitResource.java

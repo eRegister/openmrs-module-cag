@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <!--
+        See http://wiki.openmrs.org/display/docs/Module+liquibase+File for
+        documentation on this file.
+
+        See http://www.liquibase.org/manual/home#available_database_refactorings
+        for a list of supported elements and attributes
+    -->
+
+    <!--     Uncomment the changesets below if you want to make the listed classes persistable -->
+    <changeSet id="cag-2023-06-28-14-45" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="cag"/></not>
+        </preConditions>
+        <comment>
+            Creating the CAG table
+        </comment>
+        <createTable tableName="cag">
+            <column name="cag_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="description" type="varchar(255)" />
+            <column name="village" type="varchar(255)" />
+            <column name="constituency" type="varchar(255)" />
+            <column name="district" type="varchar(255)" />
+            <column name="creator" type="int" />
+            <column name="date_created" type="datetime" />
+            <column name="date_changed" type="datetime" />
+            <column name="changed_by" type="int" />
+            <column name="voided" type="boolean" />
+            <column name="voided_by" type="int" />
+            <column name="date_voided" type="datetime" />
+            <column name="void_reason" type="VARCHAR(255)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="cag-2023-06-26-17-30" author="Mojau">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="cag"/>
+                <not><columnExists tableName="cag" columnName="uuid"/></not>
+            </and>
+        </preConditions>
+        <comment>
+            Updating the CAG table
+        </comment>
+        <addColumn tableName="cag">
+            <column name="uuid" type="varchar(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="cag_changed_by_fkey" baseTableName="cag" baseColumnNames="changed_by"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+        <addForeignKeyConstraint constraintName="cag_creator_fkey" baseTableName="cag" baseColumnNames="creator"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+        <addForeignKeyConstraint constraintName="cag_voided_by_fkey" baseTableName="cag" baseColumnNames="voided_by"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+    </changeSet>
+
+    <changeSet id="cag_patient-2016-08-02-12-21" author="Mojau">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="cag_patient"/></not>
+        </preConditions>
+        <comment>
+            Creating the cag_patient table
+        </comment>
+        <createTable tableName="cag_patient">
+            <column name="cag_patient_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cag_id" type="int" />
+            <column name="patient_id" type="int"/>
+            <column name="status" type="boolean" defaultValue="true">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="uuid" type="varchar(38)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+        <addForeignKeyConstraint constraintName="cag_patient_cag_id_fk" baseTableName="cag_patient" baseColumnNames="cag_id"  referencedTableName="cag"
+                                 referencedColumnNames="cag_id" />
+        <addForeignKeyConstraint constraintName="cag_patient_patient_id_fk" baseTableName="cag_patient" baseColumnNames="patient_id"  referencedTableName="patient"
+                                 referencedColumnNames="patient_id" />
+    </changeSet>
+
+    <changeSet id="cag_visit-2033-09-05-15-13-35" author="Mojau">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="cag_visit"/></not>
+        </preConditions>
+        <comment>
+            Creating the cag_visit table
+        </comment>
+        <createTable tableName="cag_visit">
+            <column name="cag_visit_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cag_id" type="int" />
+            <column name="patient_id" type="int"/>
+            <column name="uuid" type="varchar(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int" />
+            <column name="date_created" type="datetime" />
+            <column name="date_started" type="datetime" />
+            <column name="date_stopped" type="datetime" />
+            <column name="date_changed" type="datetime" />
+            <column name="changed_by" type="int" />
+            <column name="voided" type="boolean" />
+            <column name="voided_by" type="int" />
+            <column name="date_voided" type="datetime" />
+            <column name="void_reason" type="VARCHAR(255)" />
+
+        </createTable>
+        <addForeignKeyConstraint constraintName="cag_visit_cag_id_fkey" baseTableName="cag_visit" baseColumnNames="cag_id"  referencedTableName="cag"
+                                 referencedColumnNames="cag_id" />
+        <addForeignKeyConstraint constraintName="cag_visit_patient_id_fkey" baseTableName="cag_visit" baseColumnNames="patient_id"  referencedTableName="patient"
+                                 referencedColumnNames="patient_id" />
+        <addForeignKeyConstraint constraintName="cag_visit_changed_by_fkey" baseTableName="cag_visit" baseColumnNames="changed_by"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+        <addForeignKeyConstraint constraintName="cag_visit_creator_fkey" baseTableName="cag_visit" baseColumnNames="creator"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+        <addForeignKeyConstraint constraintName="cag_visit_voided_by_fkey" baseTableName="cag_visit" baseColumnNames="voided_by"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+    </changeSet>
+
+    <changeSet id="cag_visit-2023-11-23-21-09" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="cag_visit"/>
+                <not><columnExists tableName="cag_visit" columnName="location"/></not>
+            </and>
+        </preConditions>
+        <comment>
+            Adding location column CAG Visit Table
+        </comment>
+        <addColumn tableName="cag_visit">
+            <column name="location" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="missed_drug_pickup-2023-11-15-03-05" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="missed_drug_pickup"/></not>
+        </preConditions>
+        <comment>
+            Creating the missed drug pickup table
+        </comment>
+        <createTable tableName="missed_drug_pickup">
+            <column name="missed_drug_pickup_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cag_visit_id" type="int" />
+            <column name="patient_id" type="int"/>
+            <column name="reason_missed" type="VARCHAR(255)" />
+        </createTable>
+        <addForeignKeyConstraint constraintName="missed_drug_pickup_visit_id_fk" baseTableName="missed_drug_pickup" baseColumnNames="cag_visit_id"  referencedTableName="cag_visit"
+                                 referencedColumnNames="cag_visit_id" />
+        <addForeignKeyConstraint constraintName="missed_drug_pickup_patient_id_fkey" baseTableName="missed_drug_pickup" baseColumnNames="patient_id"  referencedTableName="patient"
+                                 referencedColumnNames="patient_id" />
+    </changeSet>
+
+    <changeSet id="cag_visit_visit-2023-11-18-13-21" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="cag_visit_visit"/></not>
+        </preConditions>
+        <comment>
+            Creating the cag_visit_visit table
+        </comment>
+        <createTable tableName="cag_visit_visit">
+            <column name="cag_visit_visit_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cag_visit_id" type="int" />
+            <column name="visit_id" type="int"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="cag_visit_visit_cag_visit_id_fkey" baseTableName="cag_visit_visit" baseColumnNames="cag_visit_id"  referencedTableName="cag_visit"
+                                 referencedColumnNames="cag_visit_id" />
+        <addForeignKeyConstraint constraintName="cag_visit_visit_visit_id_fkey" baseTableName="cag_visit_visit" baseColumnNames="visit_id"  referencedTableName="visit"
+                                 referencedColumnNames="visit_id" />
+    </changeSet>
+
+    <changeSet id="cag_encounter-2023-11-15-03-35" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="cag_encounter"/></not>
+        </preConditions>
+        <comment>
+            Creating the cag encounter table
+        </comment>
+        <createTable tableName="cag_encounter">
+            <column name="cag_encounter_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cag_id" type="int"/>
+            <column name="location_id" type="int"/>
+            <column name="cag_visit_id" type="int"/>
+            <column name="patient_id" type="int"/>
+            <column name="uuid" type="varchar(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int" />
+            <column name="date_created" type="datetime" />
+            <column name="date_changed" type="datetime" />
+            <column name="changed_by" type="int" />
+            <column name="voided" type="boolean" />
+            <column name="voided_by" type="int" />
+            <column name="date_voided" type="datetime" />
+            <column name="void_reason" type="VARCHAR(255)" />
+        </createTable>
+        <addForeignKeyConstraint constraintName="cag_encounter_cag_id_fkey" baseTableName="cag_encounter" baseColumnNames="cag_id"  referencedTableName="cag"
+                                 referencedColumnNames="cag_id" />
+        <addForeignKeyConstraint constraintName="cag_encounter_location_id_fkey" baseTableName="cag_encounter" baseColumnNames="location_id"  referencedTableName="location"
+                                 referencedColumnNames="location_id" />
+        <addForeignKeyConstraint constraintName="cag_encounter_cag_visit_id_fkey" baseTableName="cag_encounter" baseColumnNames="cag_visit_id"  referencedTableName="cag_visit"
+                                 referencedColumnNames="cag_visit_id" />
+        <addForeignKeyConstraint constraintName="cag_encounter_patient_id_fkey" baseTableName="cag_encounter" baseColumnNames="patient_id"  referencedTableName="patient"
+                                 referencedColumnNames="patient_id" />
+        <addForeignKeyConstraint constraintName="cag_encounter_changed_by_fkey" baseTableName="cag_encounter" baseColumnNames="changed_by"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+        <addForeignKeyConstraint constraintName="cag_encounter_creator_fkey" baseTableName="cag_encounter" baseColumnNames="creator"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+        <addForeignKeyConstraint constraintName="cag_encounter_voided_by_fkey" baseTableName="cag_encounter" baseColumnNames="voided_by"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+    </changeSet>
+
+    <changeSet id="cag_encounter-2023-11-23-21-13" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="cag_encounter"/>
+                <not><columnExists tableName="cag_encounter" columnName="cag_encounter_datetime"/></not>
+            </and>
+        </preConditions>
+        <comment>
+            Adding cag_encounter_datetime column to CAG Encounter Table
+        </comment>
+        <addColumn tableName="cag_encounter">
+            <column name="cag_encounter_datetime" type="datetime" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="cag_encounter-2023-11-23-21-24" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="cag_encounter"/>
+                <not><columnExists tableName="cag_encounter" columnName="next_encounter_date"/></not>
+            </and>
+        </preConditions>
+        <comment>
+            Adding cag_encounter_datetime column to CAG Encounter Table
+        </comment>
+        <addColumn tableName="cag_encounter">
+            <column name="next_encounter_date" type="datetime" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="cag_encounter_encounter-2023-11-18-13-31" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="cag_encounter_encounter"/></not>
+        </preConditions>
+        <comment>
+            Creating the cag_encounter_encounter table
+        </comment>
+        <createTable tableName="cag_encounter_encounter">
+            <column name="cag_encounter_encounter_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cag_encounter_id" type="int" />
+            <column name="encounter_id" type="int"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="cag_encounter_encounter_cag_encounter_id_fkey" baseTableName="cag_encounter_encounter" baseColumnNames="cag_encounter_id"  referencedTableName="cag_encounter"
+                                 referencedColumnNames="cag_encounter_id" />
+        <addForeignKeyConstraint constraintName="cag_encounter_encounter_encounter_id_fkey" baseTableName="cag_encounter_encounter" baseColumnNames="encounter_id"  referencedTableName="encounter"
+                                 referencedColumnNames="encounter_id" />
+    </changeSet>
+
+</databaseChangeLog>
