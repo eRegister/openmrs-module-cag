@@ -29,6 +29,9 @@ public class CagVisit extends BaseOpenmrsData {
 	@Column(name = "location")
 	private String locationName;
 	
+	@Column(name = "active")
+	private Boolean isActive;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "patient_id")
 	private Patient attender;
@@ -50,6 +53,14 @@ public class CagVisit extends BaseOpenmrsData {
 	
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
+	}
+	
+	public Boolean getIsActive() {
+		return isActive;
+	}
+	
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 	public Date getDateStarted() {
@@ -112,9 +123,9 @@ public class CagVisit extends BaseOpenmrsData {
 	
 	@Override
 	public String toString() {
-		return "CagVisit{" + "id=" + id + ", cag=" + cag + ", cagUuid='" + '\'' + ", dateStarted=" + dateStarted
-		        + ", dateStopped=" + dateStopped + ", attenderUuid='" + '\'' + ", locationName='" + locationName + '\''
-		        + ", presentPatients=" + ", visitUuidList=" + ", visitList=" + ", absentees=" + absentees + ", display='"
-		        + '\'' + '}';
+		return "CagVisit{" + "id=" + id + ", dateStarted=" + dateStarted + ", isActive=" + isActive + ", dateStopped="
+		        + dateStopped + ", cag=" + cag + ", cagUuid='" + '\'' + ", attenderUuid='" + '\'' + ", locationName='"
+		        + locationName + '\'' + ", presentPatients=" + ", visitUuidList=" + ", visitList=" + ", absentees="
+		        + absentees + ", display='" + '\'' + '}';
 	}
 }

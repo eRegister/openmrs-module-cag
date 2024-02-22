@@ -22,7 +22,10 @@ public class CagPatientResource extends DelegatingCrudResource<CagPatient> {
 	
 	@Override
 	protected void delete(CagPatient cagPatient, String reason, RequestContext requestContext) throws ResponseException {
-		System.out.println("Deleting a Patient from Cag!!!!");
+		System.out.println("Deleting a Patient from Cag!!!!\n\n\n");
+		
+		System.out.println("Supplied uuid : " + cagPatient.getUuid());
+		
 		getService().deletePatientFromCag(cagPatient.getUuid());
 	}
 	
@@ -51,7 +54,7 @@ public class CagPatientResource extends DelegatingCrudResource<CagPatient> {
 	public CagPatient getByUniqueId(String uuid) {
 		
 		System.out.println("getByUniqueId id being called!!!");
-		CagPatient cagPatient = getService().getActiveCagVisitByAttender(uuid);
+		CagPatient cagPatient = getService().getCagPatientByUuid(uuid);
 		
 		return cagPatient;
 	}
@@ -71,19 +74,28 @@ public class CagPatientResource extends DelegatingCrudResource<CagPatient> {
 		if (representation instanceof DefaultRepresentation) {
 			description = new DelegatingResourceDescription();
 			
-			description.addProperty("activeCagVisits");
+			description.addProperty("uuid");
+			description.addProperty("patient", Representation.REF);
+			description.addProperty("cag", Representation.REF);
+			description.addProperty("uuid");
 			
 			description.addSelfLink();
 			description.addLink("full", ".?v=full");
 		} else if (representation instanceof FullRepresentation) {
 			description = new DelegatingResourceDescription();
 			
-			description.addProperty("activeCagVisits");
+			description.addProperty("uuid");
+			description.addProperty("patient", Representation.REF);
+			description.addProperty("cag", Representation.REF);
+			description.addProperty("uuid");
 			
 			description.addSelfLink();
 		} else {
 			
-			description.addProperty("activeCagVisits");
+			description.addProperty("uuid");
+			description.addProperty("patient", Representation.REF);
+			description.addProperty("cag", Representation.REF);
+			description.addProperty("uuid");
 			
 			description.addSelfLink();
 		}

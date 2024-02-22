@@ -13,6 +13,7 @@ import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentat
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
+import org.openmrs.module.webservices.rest.web.resource.api.Searchable;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
@@ -20,6 +21,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -28,12 +30,17 @@ import java.util.List;
 @Resource(name = RestConstants.VERSION_1 + CagController.CAG_VISIT_NAMESPACE, supportedClass = CagVisit.class, supportedOpenmrsVersions = {
         "1.8.*", "2.1.*", "2.4.*" })
 @Component
-public class CagVisitResource extends DelegatingCrudResource<CagVisit> {
+public class CagVisitResource extends DelegatingCrudResource<CagVisit> implements Searchable {
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		System.out.println("propertiesToUpdate.toString():\n" + propertiesToUpdate.get("dateStopped") + "\n");
-		return getService().closeCagVisit(uuid, propertiesToUpdate.get("dateStopped").toString());
+		System.out.println("propertiesToUpdate.toString():\n" + propertiesToUpdate.get("dateStopped").toString() + "\n");
+		try {
+			return getService().closeCagVisit(uuid, propertiesToUpdate.get("dateStopped").toString());
+		}
+		catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Override
@@ -80,6 +87,19 @@ public class CagVisitResource extends DelegatingCrudResource<CagVisit> {
 	}
 	
 	@Override
+	protected PageableResult doSearch(RequestContext context) {
+		
+		String attenderUuid = context.getParameter("attenderuuid");
+		Boolean isActive = Boolean.valueOf(context.getParameter("isactive"));
+		
+		System.out.println("uuid : " + attenderUuid + " , isactive :" + isActive);
+		
+		List<CagVisit> searchedCagVisits = getService().searchCagVisits(attenderUuid, isActive);
+		
+		return new NeedsPaging<CagVisit>(searchedCagVisits, context);
+	}
+	
+	@Override
 	public DelegatingResourceDescription getCreatableProperties() {
 		DelegatingResourceDescription description = new DelegatingResourceDescription();
 		
@@ -102,27 +122,25 @@ public class CagVisitResource extends DelegatingCrudResource<CagVisit> {
 			
 			description.addProperty("uuid");
 			description.addProperty("dateStarted");
+			description.addProperty("isActive");
 			description.addProperty("dateStopped");
+			description.addProperty("absentees");
 			description.addProperty("cag", Representation.REF);
 			description.addProperty("attender", Representation.REF);
-			description.addProperty("visits");
-			//			description.addProperty("attenderVisit");
-			//			description.addProperty("otherMemberVisits");
-			description.addProperty("absentees");
+			description.addProperty("visits", Representation.REF);
 			
 			description.addLink("full", ".?v=full");
 		} else if (representation instanceof FullRepresentation) {
 			description = new DelegatingResourceDescription();
 			
 			description.addProperty("uuid");
+			description.addProperty("dateStarted");
+			description.addProperty("isActive");
+			description.addProperty("dateStopped");
+			description.addProperty("absentees");
 			description.addProperty("cag", Representation.REF);
 			description.addProperty("attender", Representation.REF);
-			description.addProperty("dateStarted");
-			description.addProperty("dateStopped");
-			description.addProperty("visits");
-			//			description.addProperty("attenderVisit");
-			//			description.addProperty("otherMemberVisits");
-			description.addProperty("absentees");
+			description.addProperty("visits", Representation.REF);
 			
 			description.addSelfLink();
 		} else {
@@ -130,13 +148,12 @@ public class CagVisitResource extends DelegatingCrudResource<CagVisit> {
 			
 			description.addProperty("uuid");
 			description.addProperty("dateStarted");
+			description.addProperty("isActive");
 			description.addProperty("dateStopped");
+			description.addProperty("absentees");
 			description.addProperty("cag", Representation.REF);
 			description.addProperty("attender", Representation.REF);
-			description.addProperty("visits");
-			//			description.addProperty("attenderVisit");
-			//			description.addProperty("otherMemberVisits");
-			description.addProperty("absentees");
+			description.addProperty("visits", Representation.REF);
 			
 			description.addLink("full", ".?v=full");
 		}

@@ -1,5 +1,6 @@
 package org.openmrs.module.cag.api;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -62,9 +63,11 @@ public interface CagService extends OpenmrsService {
 	
 	List<CagVisit> getCagVisitList();
 	
+	List<CagVisit> searchCagVisits(String attenderUuid, Boolean isActive);
+	
 	void deleteCagVisit(String uuid);
 	
-	public CagVisit closeCagVisit(String uuid, String dateStopped);
+	public CagVisit closeCagVisit(String uuid, String dateStopped) throws ParseException;
 	
 	CagEncounter getCagEncounterByUuid(String uuid);
 	

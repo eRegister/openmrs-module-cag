@@ -29,6 +29,13 @@ into the ~/.OpenMRS/modules folder.  (Where ~/.OpenMRS is assumed to be the Appl
 Data Directory that the running openmrs is currently using.)  After putting the file in there 
 simply restart OpenMRS/tomcat and the module will be loaded and started.
 
+## Release Notes
+
+* _cagPatient endpoint bugs have been fixed, including deleting patient from CAG._
+* _cagVisit(s) with active/inactive status can be accessed from a new endpoint [at 4. under 'CAG Module endpoints'] using attender uuid_
+
+
+
 CAG Module endpoints
 ------------
 #### 1. CAG
@@ -130,9 +137,17 @@ Deactivate a member from any cag where they are active:
 
 #### 4. CAG visit
 
+Get All CAG Visits:
+
+` GET http://localhost:8081/openmrs/ws/rest/v1/cagVisit/`
+
+Get Specific CAG Visits:
+
+` GET http://localhost:8081/openmrs/ws/rest/v1/cagVisit/{UUID}`
+
 Get CAG Visit by attender(patient):
 
-` GET http://localhost:8081/openmrs/ws/rest/v1/cagPatient/{UUID} `
+` GET http://localhost:8081/openmrs/ws/rest/v1/cagVisit?attenderuuid={UUID}&isactive={true/false} `
 
 Close CAG Visit:
 
