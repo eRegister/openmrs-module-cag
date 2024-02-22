@@ -50,6 +50,8 @@ public interface CagDao {
 	
 	List<CagVisit> getCagVisitList();
 	
+	List<CagVisit> searchCagVisits(Patient attender, Boolean isActive);
+	
 	List<CagVisit> getAttenderActiveCagVisitList(Patient attender);
 	
 	CagVisit getCagVisitById(Integer id);

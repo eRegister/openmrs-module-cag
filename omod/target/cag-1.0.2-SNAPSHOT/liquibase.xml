@@ -146,6 +146,21 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="cag_visit-2024-02-21-10-10" author="Moletsane">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="cag_visit"/>
+                <not><columnExists tableName="cag_visit" columnName="active"/></not>
+            </and>
+        </preConditions>
+        <comment>
+            Adding active column CAG Visit Table
+        </comment>
+        <addColumn tableName="cag_visit">
+            <column name="active" type="boolean" defaultValueBoolean="true"/>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="missed_drug_pickup-2023-11-15-03-05" author="Moletsane">
         <preConditions onFail="MARK_RAN">
             <not><tableExists tableName="missed_drug_pickup"/></not>

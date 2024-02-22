@@ -293,6 +293,22 @@ public class HibernateCagDao implements CagDao {
 	}
 	
 	@Override
+	public List<CagVisit> searchCagVisits(Patient attender, Boolean isActive) {
+		Transaction tx = getSession().beginTransaction();
+		
+		Query query = getSession().createQuery(
+		    "from cag_visit cv where cv.attender=:attender and cv.isActive=:isActive and cv.voided=false");
+		query.setParameter("attender", attender);
+		query.setBoolean("isActive", isActive);
+		List<CagVisit> cagVisits = (List<CagVisit>) query.list();
+		
+		if (!tx.wasCommitted())
+			tx.commit();
+		
+		return cagVisits;
+	}
+	
+	@Override
 	public List<CagVisit> getAttenderActiveCagVisitList(Patient attender) {
 		Transaction tx = getSession().beginTransaction();
 		
@@ -386,10 +402,12 @@ public class HibernateCagDao implements CagDao {
 	public CagVisit closeCagVisit(String cagVisitUuid, String dateStopped) {
 		Transaction tx = getSession().beginTransaction();
 		
+		System.out.println("\nNow in closeCagVisit:" + dateStopped + "\n");
+		System.out.println("\nNow in closeCagVisit:" + cagVisitUuid + "\n");
+		
 		Query query = getSession().createQuery(
-		    "update cag_visit cv set cv.dateStopped=:dateStopped where cv.uuid=:uuid and cv.voided=:active");
+		    "update cag_visit cv set cv.dateStopped=:dateStopped where cv.uuid=:uuid and cv.voided=false");
 		query.setString("dateStopped", dateStopped);
-		query.setInteger("active", 0);
 		query.setString("uuid", cagVisitUuid);
 		query.executeUpdate();
 		

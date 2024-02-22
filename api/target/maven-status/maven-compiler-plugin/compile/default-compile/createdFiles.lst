@@ -8,5 +8,4 @@ org/openmrs/module/cag/api/db/hibernate/HibernateCagDao.class
 org/openmrs/module/cag/CagConfig.class
 org/openmrs/module/cag/api/CagService.class
 org/openmrs/module/cag/api/db/CagDao.class
-org/openmrs/module/cag/cag/CagVisitVisit.class
 org/openmrs/module/cag/cag/CagPatient.class
