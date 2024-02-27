@@ -12,7 +12,7 @@ import java.util.*;
 
 @Repository
 @Entity(name = "cag_visit")
-@JsonIgnoreProperties({ "creator", "changedBy" })
+@JsonIgnoreProperties({ "creator", "changedBy", "attender", "visits" })
 public class CagVisit extends BaseOpenmrsData {
 	
 	@Id
@@ -32,6 +32,7 @@ public class CagVisit extends BaseOpenmrsData {
 	@Column(name = "active")
 	private Boolean isActive;
 	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "patient_id")
 	private Patient attender;
@@ -109,6 +110,7 @@ public class CagVisit extends BaseOpenmrsData {
 		return cag;
 	}
 	
+	@JsonIgnore
 	public void setCag(Cag cag) {
 		this.cag = cag;
 	}

@@ -279,36 +279,42 @@ public class CagServiceImpl extends BaseOpenmrsService implements CagService {
 	@Override
 	public CagVisit closeCagVisit(String uuid, String dateStopped) throws ParseException {
 		
-		Date stopDate = null;
+		System.out.println("dateStopped [closeCagVisit in Service]: " + dateStopped);
+		
 		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-			stopDate = simpleDateFormat.parse(dateStopped);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date stopDate = simpleDateFormat.parse(dateStopped);
+			
+			String dateTime = formatDateTime(stopDate);
+			
+			System.out.println("\nStop Date is : " + dateTime);
+			
+			CagVisit cagVisit = dao.closeCagVisit(uuid, dateTime);
+			
+			CagVisit updatedCagVisit = getCagVisitByUuid(cagVisit.getUuid());
+			
+			Map<String, String> absentees = getAbsentees(updatedCagVisit);
+			Set<String> absenteeUuidSet = absentees.keySet();
+			Integer cagId = updatedCagVisit.getCag().getId();
+			Date visitStartDate = updatedCagVisit.getDateStarted();
+			
+			closePatientVisits(absenteeUuidSet, cagId, visitStartDate, dateTime);
+			
+			return updatedCagVisit;
 		}
 		catch (Exception e) {
-			System.out.println("\nstopDate" + stopDate + "\n");
 			System.out.println("Cought ParseException Exception!!!");
 			throw new ParseException("Date ParseException encountered!", 1);
 		}
-		
-		String dateTime = formatDateTime(stopDate.toString());
-		
-		System.out.println("\nStop Date is : " + dateTime);
-		
-		CagVisit cagVisit = dao.closeCagVisit(uuid, dateTime);
-		Map<String, String> absentees = getAbsentees(cagVisit);
-		Set<String> absenteeUuidSet = absentees.keySet();
-		Cag cag = cagVisit.getCag();
-		Date visitStartDate = cagVisit.getDateStarted();
-		
-		closePatientVisits(absenteeUuidSet, cag.getId(), visitStartDate, dateStopped);
-		
-		return cagVisit;
 		
 	}
 	
 	public void closePatientVisits(Set<String> absenteeUuidSet, Integer cagId, Date visitDate, String dateStopped) {
 		
 		List<Patient> cagPatientList = getCagPatientList(cagId);
+		
+		System.out.println("\nvisitDate[In closePatientVisits] : " + visitDate);
+		System.out.println("\ndateStopped[In closePatientVisits] : " + dateStopped);
 		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String VisitTime = simpleDateFormat.format(visitDate);
@@ -430,16 +436,12 @@ public class CagServiceImpl extends BaseOpenmrsService implements CagService {
 		return null;
 	}
 	
-	public String formatDateTime(String inputDate) {
+	public String formatDateTime(Date inputDate) {
 		
-		String dateString = inputDate.substring(0, 9);
-		String timeString = inputDate.substring(11, 18);
+		SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String outputDateString = outputDateFormat.format(inputDate);
 		
-		String dateTimeString = dateString + " " + timeString;
-		
-		System.out.println("dateTimeString : " + dateTimeString);
-		
-		return dateTimeString;
+		return outputDateString;
 	}
 	
 	public Double computeQty(DrugOrder order) {
