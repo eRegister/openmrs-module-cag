@@ -31,8 +31,11 @@ simply restart OpenMRS/tomcat and the module will be loaded and started.
 
 ## Release Notes
 
+* _**Cleared close cagVisit bugs**_
 * _cagPatient endpoint bugs have been fixed, including deleting patient from CAG._
 * _cagVisit(s) with active/inactive status can be accessed from a new endpoint [at 4. under 'CAG Module endpoints'] using attender uuid_
+
+
 
 
 

@@ -402,11 +402,11 @@ public class HibernateCagDao implements CagDao {
 	public CagVisit closeCagVisit(String cagVisitUuid, String dateStopped) {
 		Transaction tx = getSession().beginTransaction();
 		
-		System.out.println("\nNow in closeCagVisit:" + dateStopped + "\n");
-		System.out.println("\nNow in closeCagVisit:" + cagVisitUuid + "\n");
+		System.out.println("\nNow in closeCagVisitDAO : " + dateStopped + "\n");
+		System.out.println("\nNow in closeCagVisitDAO : " + cagVisitUuid + "\n");
 		
 		Query query = getSession().createQuery(
-		    "update cag_visit cv set cv.dateStopped=:dateStopped where cv.uuid=:uuid and cv.voided=false");
+		    "update cag_visit cv set cv.dateStopped=:dateStopped, isActive=false where cv.uuid=:uuid and cv.voided=false");
 		query.setString("dateStopped", dateStopped);
 		query.setString("uuid", cagVisitUuid);
 		query.executeUpdate();
