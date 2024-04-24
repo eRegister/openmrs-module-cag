@@ -64,10 +64,9 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 		System.out.println("Updating CAG Encounter!!\n\n");
 		
 		String locationUuid = propertiesToUpdate.get("location").toString();
-		Date encounterDateTime = formatDate(propertiesToUpdate.get("encounterDateTime").toString());
 		Date nextEncounterDateTime = formatDate(propertiesToUpdate.get("nextEncounterDate").toString());
 		
-		return getService().updateCagEncounter(uuid, locationUuid, encounterDateTime, nextEncounterDateTime);
+		return getService().updateCagEncounter(uuid, locationUuid, nextEncounterDateTime);
 	}
 	
 	@Override
@@ -75,7 +74,6 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 		DelegatingResourceDescription description = new DelegatingResourceDescription();
 		
 		description.addProperty("location");
-		description.addProperty("encounterDateTime");
 		description.addProperty("nextEncounterDate");
 		
 		return description;

@@ -1,5 +1,6 @@
 package org.openmrs.module.cag.cag;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.*;
 import org.openmrs.annotation.AllowDirectAccess;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import java.util.*;
 
 @Repository
 @Entity(name = "cag_encounter")
+@JsonIgnoreProperties({ "creator", "changedBy", "cagVisit", "attender", "encounters" })
 public class CagEncounter extends BaseOpenmrsData {
 	
 	@Id
@@ -120,10 +122,10 @@ public class CagEncounter extends BaseOpenmrsData {
 		this.displayed = displayed;
 	}
 	
-	@Override
-	public String toString() {
-		return "CagEncounter{" + "id=" + id + ", cag=" + cag + ", cagVisit=" + cagVisit + ", location=" + location.getName()
-		        + ", attender=" + attender + ", cagEncounterDateTime=" + cagEncounterDateTime + ", nextEncounterDate="
-		        + nextEncounterDate + ", encounters=" + encounters + ", displayed='" + displayed + '\'' + '}';
-	}
+	//	@Override
+	//	public String toString() {
+	//		return "CagEncounter{" + "id=" + id + ", cag=" + cag + ", cagVisit=" + cagVisit + ", location=" + location.getName()
+	//		        + ", attender=" + attender + ", cagEncounterDateTime=" + cagEncounterDateTime + ", nextEncounterDate="
+	//		        + nextEncounterDate + ", encounters=" + encounters + ", displayed='" + displayed + '\'' + '}';
+	//	}
 }
