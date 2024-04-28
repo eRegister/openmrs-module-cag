@@ -78,9 +78,9 @@ public interface CagDao {
 	
 	void saveCagPatientEncounter(Encounter encounter);
 	
-	void updateCagEncounter(String cagEncounterUuid, Location location, Date encounterDateTime, Date nextEncounterDateTime);
+	void updateCagEncounter(String cagEncounterUuid, Location location, Date nextEncounterDateTime);
 	
-	void deleteCagEncounter(CagEncounter cagEncounter);
+	void deleteCagEncounter(String uuid);
 	
 	public List<CagPatient> getAllCagPatients();
 	

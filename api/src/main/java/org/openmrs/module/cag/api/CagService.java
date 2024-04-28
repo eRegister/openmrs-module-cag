@@ -67,13 +67,13 @@ public interface CagService extends OpenmrsService {
 	
 	void deleteCagVisit(String uuid);
 	
-	public CagVisit closeCagVisit(String uuid, String dateStopped) throws ParseException;
+	CagVisit closeCagVisit(String uuid, String dateStopped) throws ParseException;
 	
 	CagEncounter getCagEncounterByUuid(String uuid);
 	
 	CagEncounter saveCagEncounter(CagEncounter cagEncounter);
 	
-	CagEncounter updateCagEncounter(String uuid, String locationUuid, Date encounterDateTime, Date nextEncounterDateTime);
+	CagEncounter updateCagEncounter(String uuid, String locationUuid, Date nextEncounterDateTime);
 	
 	void deleteCagEncounter(String uuid);
 	

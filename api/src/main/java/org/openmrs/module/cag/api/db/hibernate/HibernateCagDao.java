@@ -476,39 +476,58 @@ public class HibernateCagDao implements CagDao {
 	}
 	
 	@Override
-	public void updateCagEncounter(String cagEncounterUuid, Location location, Date encounterDateTime,
-	        Date nextEncounterDateTime) {
+	public void updateCagEncounter(String cagEncounterUuid, Location location, Date nextEncounterDateTime) {
 		Transaction tx = getSession().beginTransaction();
 		
-		Query query = getSession().createQuery(
-		    "update cag_encounter ce set ce.location=:location,"
-		            + " ce.cagEncounterDateTime=:encounterDateTime, ce.nextEncounterDate=:nextEncounterDateTime"
+		Query cagEncounterUpdater = getSession().createQuery(
+		    "update cag_encounter ce set ce.location=:location," + " ce.nextEncounterDate=:nextEncounterDateTime"
 		            + " where ce.uuid=:cagEncounterUuid");
-		query.setString("cagEncounterUuid", cagEncounterUuid);
-		query.setParameter("encounterDateTime", encounterDateTime);
-		query.setParameter("nextEncounterDateTime", nextEncounterDateTime);
-		query.setParameter("location", location);
-		query.executeUpdate();
+		cagEncounterUpdater.setString("cagEncounterUuid", cagEncounterUuid);
+		cagEncounterUpdater.setParameter("nextEncounterDateTime", nextEncounterDateTime);
+		cagEncounterUpdater.setParameter("location", location);
+		cagEncounterUpdater.executeUpdate();
 		
-		//		Query query2 = getSession().createQuery(
-		//				"update Encounter e set e.location=:location, e.encounterDatetime=:encounterDateTime"
-		//						+ " where ce.uuid=:cagEncounterUuid");
-		//		query2.setString("cagEncounterUuid", cagEncounterUuid);
-		//		query2.setParameter("encounterDateTime", encounterDateTime);
-		//		query2.setParameter("nextEncounterDateTime", nextEncounterDateTime);
-		//		query2.setParameter("location", location);
-		//		query2.executeUpdate();
+		SQLQuery encountersUpdater = getSession().createSQLQuery(
+		    "update encounter set location_id=737 where encounter_id in"
+		            + " (select encounter_id from cag_encounter_encounter cee join cag_encounter ce on "
+		            + "cee.cag_encounter_id=ce.cag_encounter_id where ce.uuid=:cagEncounterUuid)");
+		encountersUpdater.setString("cagEncounterUuid", cagEncounterUuid);
+		encountersUpdater.executeUpdate();
+		
+		SQLQuery obsUpdater = getSession().createSQLQuery(
+		    "update obs set location_id=737 where encounter_id in"
+		            + " (select encounter_id from cag_encounter_encounter cee join cag_encounter ce on "
+		            + "cee.cag_encounter_id=ce.cag_encounter_id where ce.uuid=:cagEncounterUuid)");
+		obsUpdater.setString("cagEncounterUuid", cagEncounterUuid);
+		obsUpdater.executeUpdate();
 		
 		if (!tx.wasCommitted())
 			tx.commit();
 	}
 	
 	@Override
-	public void deleteCagEncounter(CagEncounter cagEncounter) {
-		System.out.println("\n=========Executing DAO deleteCagEncounter=========\n");
+	public void deleteCagEncounter(String cagEncounterUuid) {
+		
 		Transaction tx = getSession().beginTransaction();
 		
-		getSession().update(cagEncounter);
+		Query cagEncounterVoider = getSession().createQuery(
+		    "update cag_encounter ce set ce.voided=true" + " where ce.uuid=:cagEncounterUuid");
+		cagEncounterVoider.setString("cagEncounterUuid", cagEncounterUuid);
+		cagEncounterVoider.executeUpdate();
+		
+		SQLQuery encountersVoider = getSession().createSQLQuery(
+		    "update encounter set voided=1 where encounter_id in"
+		            + " (select encounter_id from cag_encounter_encounter cee join cag_encounter ce on "
+		            + "cee.cag_encounter_id=ce.cag_encounter_id where ce.uuid=:cagEncounterUuid)");
+		encountersVoider.setString("cagEncounterUuid", cagEncounterUuid);
+		encountersVoider.executeUpdate();
+		
+		SQLQuery obsUpdater = getSession().createSQLQuery(
+		    "update obs set voided=1 where encounter_id in"
+		            + " (select encounter_id from cag_encounter_encounter cee join cag_encounter ce on "
+		            + "cee.cag_encounter_id=ce.cag_encounter_id where ce.uuid=:cagEncounterUuid)");
+		obsUpdater.setString("cagEncounterUuid", cagEncounterUuid);
+		obsUpdater.executeUpdate();
 		
 		if (!tx.wasCommitted())
 			tx.commit();

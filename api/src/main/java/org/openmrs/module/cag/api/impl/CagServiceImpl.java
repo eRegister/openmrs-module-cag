@@ -13,6 +13,7 @@ import ca.uhn.hl7v2.model.v25.datatype.MA;
 import liquibase.servicelocator.LiquibaseService;
 import org.openmrs.*;
 import org.openmrs.api.APIException;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.OrderContext;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
@@ -398,42 +399,23 @@ public class CagServiceImpl extends BaseOpenmrsService implements CagService {
 	
 	@Override
 	public void deleteCagEncounter(String uuid) {
-		CagEncounter cagEncounter = getCagEncounterByUuid(uuid);
-		cagEncounter.setVoided(true);
-		
-		System.out.println("retrieved cagEncounter : " + cagEncounter.getUuid() + "\nVoided : " + cagEncounter.getVoided());
-		
-		Set<Encounter> encounters = cagEncounter.getEncounters();
-		for (Encounter currentEncounter : encounters) {
-			currentEncounter.setVoided(true);
-			System.out.println(" encounter : " + currentEncounter + "\nVoided : " + currentEncounter.getVoided());
-			
-			System.out.println("\n");
-			Set<Obs> obs = currentEncounter.getObs();
-			for (Obs currentObs : obs) {
-				currentObs.setVoided(true);
-				System.out.println(" obs : " + currentObs + "\nVoided : " + currentObs.getVoided());
-			}
-			
-			System.out.println("\n\n========================");
-			
-		}
-		
-		dao.deleteCagEncounter(cagEncounter);
+		dao.deleteCagEncounter(uuid);
 	}
 	
 	@Override
-	public CagEncounter updateCagEncounter(String cagEncounterUuid, String locationUuid, Date encounterDateTime,
-	        Date nextEncounterDateTime) {
+	public CagEncounter updateCagEncounter(String cagEncounterUuid, String locationUuid, Date nextEncounterDateTime) {
 		CagEncounter retrievedCagEncounter = dao.getCagEncounterByUuid(cagEncounterUuid);
-		System.out.println("========nextEncounterDateTime ====\n" + retrievedCagEncounter);
+		System.out.println("========retrievedCagEncounter ====\n" + retrievedCagEncounter);
 		
+		//		Location updatingLocation =
+		System.out.println("\nLocation uuid : " + locationUuid);
 		Location location = Context.getLocationService().getLocation(locationUuid);
-		System.out.println("location: " + locationUuid);
 		
-		dao.updateCagEncounter(cagEncounterUuid, location, encounterDateTime, nextEncounterDateTime);
+		System.out.println("\nGot location : " + location);
 		
-		return null;
+		dao.updateCagEncounter(cagEncounterUuid, location, nextEncounterDateTime);
+		
+		return dao.getCagEncounterByUuid(cagEncounterUuid);
 	}
 	
 	public String formatDateTime(Date inputDate) {
