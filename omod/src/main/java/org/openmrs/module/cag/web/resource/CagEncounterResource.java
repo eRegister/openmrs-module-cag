@@ -1,6 +1,5 @@
 package org.openmrs.module.cag.web.resource;
 
-import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cag.api.CagService;
 import org.openmrs.module.cag.cag.CagEncounter;
@@ -16,6 +15,7 @@ import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.springframework.expression.ParseException;
@@ -29,7 +29,6 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 	
 	@Override
 	protected void delete(CagEncounter cagEncounter, String reason, RequestContext requestContext) throws ResponseException {
-		System.out.println("Deleting a Cag Encounter!!!!");
 		getService().deleteCagEncounter(cagEncounter.getUuid());
 	}
 	
@@ -40,7 +39,6 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 	
 	@Override
 	public CagEncounter save(CagEncounter cagEncounter) {
-		//		System.out.println("CagEncounterResource save called!!");
 		return getService().saveCagEncounter(cagEncounter);
 	}
 	
@@ -51,7 +49,18 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		return super.doGetAll(context);
+		return new NeedsPaging<CagEncounter>(getService().getAllCagEncounters(), context);
+	}
+	
+	@Override
+	protected PageableResult doSearch(RequestContext context) throws ResponseException {
+		String cagUuid = context.getParameter("caguuid");
+		try {
+			return new NeedsPaging<CagEncounter>(getService().searchCagEncounters(cagUuid), context);
+		}
+		catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Override
@@ -61,21 +70,16 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 	
 	@Override
 	public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
-		System.out.println("Updating CAG Encounter!!\n\n");
-		
 		String locationUuid = propertiesToUpdate.get("location").toString();
 		Date nextEncounterDateTime = formatDate(propertiesToUpdate.get("nextEncounterDate").toString());
-		
 		return getService().updateCagEncounter(uuid, locationUuid, nextEncounterDateTime);
 	}
 	
 	@Override
 	public DelegatingResourceDescription getUpdatableProperties() throws ResourceDoesNotSupportOperationException {
 		DelegatingResourceDescription description = new DelegatingResourceDescription();
-		
 		description.addProperty("location");
 		description.addProperty("nextEncounterDate");
-		
 		return description;
 	}
 	
@@ -96,7 +100,7 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 	public DelegatingResourceDescription getRepresentationDescription(Representation representation) {
 		DelegatingResourceDescription description = null;
 		
-		if (representation instanceof DefaultRepresentation) {
+		if (representation instanceof RefRepresentation) {
 			description = new DelegatingResourceDescription();
 			
 			description.addProperty("uuid");
@@ -104,7 +108,7 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 			description.addProperty("cag", Representation.REF);
 			
 			description.addLink("full", ".?v=full");
-		} else if (representation instanceof FullRepresentation) {
+		} else if (representation instanceof DefaultRepresentation) {
 			description = new DelegatingResourceDescription();
 			
 			description.addProperty("uuid");
@@ -116,32 +120,33 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 			description.addProperty("encounters", Representation.REF);
 			
 			description.addSelfLink();
-		} else if (representation instanceof RefRepresentation) {
+		} else if (representation instanceof FullRepresentation) {
 			description = new DelegatingResourceDescription();
 			
 			description.addProperty("uuid");
 			description.addProperty("cagEncounterDateTime");
 			description.addProperty("nextEncounterDate");
+			description.addProperty("dateCreated");
+			description.addProperty("dateChanged");
+			description.addProperty("nextEncounterDate");
+			description.addProperty("creator", Representation.REF);
+			description.addProperty("changedBy", Representation.REF);
 			description.addProperty("cag", Representation.REF);
+			description.addProperty("attender", Representation.REF);
+			description.addProperty("location", Representation.REF);
+			description.addProperty("encounters", Representation.REF);
 			
 			description.addLink("full", ".?v=full");
 		}
-		
 		return description;
 	}
-	
-	//        @Override
-	//        protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-	//            Cag cag =new Cag(10);
-	//            return new NeedsPaging<CagPatient>(getService().getCagPatientList(10), context);
-	//        }
 	
 	private CagService getService() {
 		return Context.getService(CagService.class);
 	}
 	
 	private Date formatDate(String dateString) {
-		Date date = null;
+		Date date;
 		
 		try {
 			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
@@ -149,7 +154,6 @@ public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 		catch (Exception e) {
 			throw new ParseException(1, "Unable to parse provided date, expects format : yyyy-MM-dd HH:mm:ss " + e);
 		}
-		
 		return date;
 	}
 	
