@@ -32,7 +32,7 @@ public class CagResource extends DelegatingCrudResource<Cag> implements Updatabl
 	@Override
 	public Cag getByUniqueId(String uuid) {
 		Cag cag = getService().getCagByUuid(uuid);
-		List<Patient> cagPatientList = getService().getCagPatientList(cag.getId());
+		List<Patient> cagPatientList = getService().getCagAllPatients(cag.getId());
 		cag.setCagPatientList(cagPatientList);
 		
 		return cag;
@@ -148,7 +148,7 @@ public class CagResource extends DelegatingCrudResource<Cag> implements Updatabl
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
 		
-		return new NeedsPaging<Cag>(getService().getCagList(), context);
+		return new NeedsPaging<Cag>(getService().getAllCags(), context);
 	}
 	
 	private CagService getService() {

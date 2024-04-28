@@ -2,7 +2,6 @@ package org.openmrs.module.cag.web.resource;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cag.api.CagService;
-import org.openmrs.module.cag.cag.Cag;
 import org.openmrs.module.cag.cag.CagVisit;
 import org.openmrs.module.cag.web.controller.CagController;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -22,9 +21,6 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Resource(name = RestConstants.VERSION_1 + CagController.CAG_VISIT_NAMESPACE, supportedClass = CagVisit.class, supportedOpenmrsVersions = {
@@ -53,7 +49,7 @@ public class CagVisitResource extends DelegatingCrudResource<CagVisit> implement
 	
 	@Override
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
-		return new NeedsPaging<CagVisit>(getService().getCagVisitList(), context);
+		return new NeedsPaging<CagVisit>(getService().getCagAllVisits(), context);
 	}
 	
 	@Override
