@@ -1,24 +1,18 @@
 package org.openmrs.module.cag.api.db;
 
-import org.hibernate.Query;
-import org.hibernate.Transaction;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Patient;
-import org.openmrs.Visit;
 import org.openmrs.module.cag.cag.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Repository("cag.CagDao")
 public interface CagDao {
 	
-	Cag getCagById(Integer cagId);
-	
-	List<Cag> getCagList();
+	List<Cag> getAllCags();
 	
 	void saveCag(Cag cag);
 	
@@ -28,7 +22,7 @@ public interface CagDao {
 	
 	CagPatient getCagPatientById(Integer cagPatientId);
 	
-	List<Patient> getCagPatientList(Integer cagId);
+	List<Patient> getAllCagPatients(Integer cagId);
 	
 	void saveCagPatient(CagPatient cagPatient);
 	
@@ -36,41 +30,27 @@ public interface CagDao {
 	
 	void deleteCag(String uuid);
 	
-	List<Integer> getPatientIdList(Integer cagId);
-	
-	void clearCag(Integer cagId);
-	
 	CagPatient getCagPatientByUuid(String uuid);
-	
-	List<CagPatient> getActiveCagVisitByAttender(Patient attender);
 	
 	CagVisit saveCagVisit(CagVisit cagVisit);
 	
 	CagVisit getCagVisitByUuid(String uuid);
 	
-	List<CagVisit> getCagVisitList();
+	List<CagVisit> getAllCagVisits();
 	
 	List<CagVisit> searchCagVisits(Patient attender, Boolean isActive);
 	
-	List<CagVisit> getAttenderActiveCagVisitList(Patient attender);
-	
-	CagVisit getCagVisitById(Integer id);
-	
-	void deleteCagVisit(Integer visitId);
+	void deleteCagVisit(String uuid);
 	
 	CagVisit closeCagVisit(String cagVisitUuid, String dateStopped);
 	
-	List<Visit> getCagVisits(Integer cagId);
-	
-	Visit getVisit(Patient patient, String dateStarted);
-	
 	void saveAbsentCagPatient(Absentee absentee);
 	
-	List<Absentee> getAbsenteeList(Integer visitId);
+	List<Absentee> getAllAbsentees(Integer visitId);
 	
 	void closeCagPatientVisit(Patient patient, String startDate, String dateStopped);
 	
-	//	void closeCagPatientVisit(String uuid, Date dateStopped);
+	List<CagEncounter> getAllCagEncounters();
 	
 	CagEncounter getCagEncounterByUuid(String uuid);
 	
@@ -78,10 +58,12 @@ public interface CagDao {
 	
 	void saveCagPatientEncounter(Encounter encounter);
 	
-	void updateCagEncounter(String cagEncounterUuid, Location location, Date nextEncounterDateTime);
+	void updateCagEncounter(String cagEncounterUuid, Integer locationId, Date nextEncounterDateTime);
 	
 	void deleteCagEncounter(String uuid);
 	
-	public List<CagPatient> getAllCagPatients();
+	List<CagEncounter> searchCagEncounters(Cag cag);
+	
+	Location getLocation(String uuid);
 	
 }
