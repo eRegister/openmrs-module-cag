@@ -31,9 +31,11 @@ simply restart OpenMRS/tomcat and the module will be loaded and started.
 
 ## Release Notes
 
-* _**Cleared close cagVisit bugs**_
-* _cagPatient endpoint bugs have been fixed, including deleting patient from CAG._
-* _cagVisit(s) with active/inactive status can be accessed from a new endpoint [at 4. under 'CAG Module endpoints'] using attender uuid_
+* _Added DELETE endpoint to CAG Visit._
+* _Added UPDATE endpoint to CAG Encounter._
+* _Added DELETE endpoint to CAG Encounter._
+* _Added GET all CAG encounters endpoint._
+* _Added GET CAG Encounter by CAG uuid endpoint._
 
 
 
@@ -162,7 +164,11 @@ Close CAG Visit:
 }
 ```
 
-Open CAG Visit:
+Delete CAG Visit:
+
+` DELETE http://localhost:8081/openmrs/ws/rest/v1/cagVisit/{UUID}`
+
+Open/Create CAG Visit:
 
 ` POST http://localhost:8081/openmrs/ws/rest/v1/cagVisit `
 
@@ -418,7 +424,26 @@ Retrieve a Specific CAG Encounter:
 
 ` GET http://localhost:8081/openmrs/ws/rest/v1/cagEncounter/{UUID}`
 
-Create CAG Encounter (ART Follow-up(Encounter + Obs) + Prescription(drug order)):
+Retrieve All CAG Encounters of a specific CAG:
+
+` GET http://localhost:8081/openmrs/ws/rest/v1/cagEncounter?caguuid={UUID}`
+
+Delete a CAG Encounter:
+
+` Delete http://localhost:8081/openmrs/ws/rest/v1/cagEncounter/{UUID}`
+
+Update a CAG Encounter:
+
+` POST http://localhost:8081/openmrs/ws/rest/v1/cagEncounter/{UUID}`
+
+```
+{
+    "location" : "907bcca9-1fe1-4ac1-9ff6-76ee210f677a",
+    "nextEncounterDate" : "2024-03-13 08:30:00"
+}
+```
+
+Create CAG Encounter (Point-of-Care Consultatiom):
 
 ` POST http://localhost:8081/openmrs/ws/rest/v1/cagEncounter `
 
@@ -906,6 +931,417 @@ Create CAG Encounter (ART Follow-up(Encounter + Obs) + Prescription(drug order))
                                     "obsDatetime": "2023-11-12 18:40:16",
                                     "person": {
                                         "uuid": "2ee9bf0f-1a71-4344-b786-d924b3a2b266"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }            
+            ]
+        }
+    ]    
+}
+
+```
+
+Create CAG Encounter (Retrospective Consultatiom):
+
+` POST http://localhost:8081/openmrs/ws/rest/v1/cagEncounter `
+
+```
+{
+    "cag": {
+        "uuid": "f5980940-3385-4ad0-9117-e7ddcc371738"
+    },
+    "cagEncounterDateTime" : "2024-01-01 08:30:00",
+    "nextEncounterDate": "2024-06-30 23:59:59",
+    "location":{
+        "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+    },
+    "attender":{
+        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+    },
+    "encounters": [
+        {
+            "encounterDatetime": "2024-01-01 08:30:00",
+            "encounterType":{
+                "uuid": "81852aee-3f10-11e4-adec-0800271c1b75"
+            },
+            "patient": {
+                "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+            },
+            "location":{
+                "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+            },
+            "obs":[
+                {
+                    "concept": {
+                        "conceptId": 2403,
+                        "uuid": "746818ac-65a0-4d74-9609-ddb2c330a31b"
+                    },
+                    "obsDatetime": "2024-01-01 08:30:00",
+                    "person": "fb1ea4fd-888a-43aa-bca4-6507db48f314",
+                    "location": "bb4074a6-5eae-4797-a2d3-033d2fa74eed",
+                    "groupMembers": [
+                        {
+                            "concept": {
+                                "conceptId": 3753,
+                                "uuid": "65aa58be-3957-4c82-ad63-422637c8dd18"
+                            },
+                            "obsDatetime": "2024-01-01 08:30:00",
+                            "person": {
+                                "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                            },
+                            "location":{
+                                "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+                            },
+                            "groupMembers": [
+                                {
+                                    "concept": {
+                                        "conceptId": 3843,
+                                        "uuid": "e0bc761d-ac3b-4033-92c7-476304b9c5e8"
+                                    },
+                                    "valueCoded": "0f880c52-3ced-43ac-a79b-07a2740ae428",
+                                    "valueCodedName": "ART patient",
+                                    "valueText": "ART patient",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    },
+                                    "location":{
+                                        "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+                                    } 
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3751,
+                                        "uuid": "ed064424-0331-47f6-9532-77156f40a014"
+                                    },
+                                    "valueCoded": "a2065636-5326-40f5-aed6-0cc2cca81ccc",
+                                    "valueCodedName": "Yes",
+                                    "valueText": "Yes",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3752,
+                                        "uuid": "88489023-783b-4021-b7a9-05ca9877bf67"
+                                    },
+                                    "valueDatetime": "2024-06-30 23:59:59",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 2250,
+                                        "uuid": "13382e01-9f18-488b-b2d2-58ab54c82d82"
+                                    },
+                                    "valueCoded": "225b0d93-d4b9-46b0-bbb2-1bce82c9107c",
+                                    "valueCodedName": "1j=TDF-3TC-DTG",
+                                    "valueDrug": "1j=TDF-3TC-DTG",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 4174,
+                                        "uuid": "9eb00622-1078-4f7b-aa69-61e6c36db347"
+                                    },
+                                    "valueCoded": "e5e0461a-35c9-42f9-9a2b-7a66122d9d9d",
+                                    "valueCodedName": "HIVTC, One month supply",
+                                    "valueText": "1 month",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3730,
+                                        "uuid": "27d55083-5e66-4b5a-91d3-2c9a42cc9996"
+                                    },
+                                    "valueNumeric": 30,
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 2224,
+                                        "uuid": "95e1fc28-84ab-4971-8bb1-d8ee68ef5739"
+                                    },
+                                    "valueCoded": "480042e0-3011-4652-b989-2e22b5a725f2",
+                                    "valueCodedName": "Stage II",
+                                    "valueText": "Stage II",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3726,
+                                        "uuid": "e8d05f4a-9c3f-4f99-941c-596f238f095f"
+                                    },
+                                    "valueCoded": "0621a9a2-7a26-4e93-8e38-3732d242ab28",
+                                    "valueCodedName": "Good adherence",
+                                    "valueText": "Good adherence",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3728,
+                                        "uuid": "3485a002-f72f-43fd-8ba7-0288273489da"
+                                    },
+                                    "valueNumeric": 30,
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "fb1ea4fd-888a-43aa-bca4-6507db48f314"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }            
+            ]
+        },
+        {
+            "encounterDatetime": "2024-01-01 08:30:00",
+            "encounterType":{
+                "uuid": "81852aee-3f10-11e4-adec-0800271c1b75"
+            },
+            "patient": {
+                "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+            },
+            "location":{
+                "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+            },
+            "obs":[
+                {
+                    "concept": {
+                        "conceptId": 2403,
+                        "uuid": "746818ac-65a0-4d74-9609-ddb2c330a31b"
+                    },
+                    "obsDatetime": "2024-01-01 08:30:00",
+                    "person": "512812d6-ccae-4739-8572-418ba3a55b62",
+                    "location": "bb4074a6-5eae-4797-a2d3-033d2fa74eed",
+                    "groupMembers": [
+                        {
+                            "concept": {
+                                "conceptId": 3753,
+                                "uuid": "65aa58be-3957-4c82-ad63-422637c8dd18"
+                            },
+                            "obsDatetime": "2024-01-01 08:30:00",
+                            "person": {
+                                "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+                            },
+                            "location":{
+                                "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+                            },
+                            "groupMembers": [
+                                {
+                                    "concept": {
+                                        "conceptId": 3843,
+                                        "uuid": "e0bc761d-ac3b-4033-92c7-476304b9c5e8"
+                                    },
+                                    "valueCoded": "0f880c52-3ced-43ac-a79b-07a2740ae428",
+                                    "valueCodedName": "ART patient",
+                                    "valueText": "ART patient",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+                                    },
+                                    "location":{
+                                        "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+                                    } 
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3751,
+                                        "uuid": "ed064424-0331-47f6-9532-77156f40a014"
+                                    },
+                                    "valueCoded": "a2065636-5326-40f5-aed6-0cc2cca81ccc",
+                                    "valueCodedName": "Yes",
+                                    "valueText": "Yes",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3752,
+                                        "uuid": "88489023-783b-4021-b7a9-05ca9877bf67"
+                                    },
+                                    "valueDatetime": "2024-06-30 23:59:59",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 2250,
+                                        "uuid": "13382e01-9f18-488b-b2d2-58ab54c82d82"
+                                    },
+                                    "valueCoded": "225b0d93-d4b9-46b0-bbb2-1bce82c9107c",
+                                    "valueCodedName": "1j=TDF-3TC-DTG",
+                                    "valueDrug": "1j=TDF-3TC-DTG",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 4174,
+                                        "uuid": "9eb00622-1078-4f7b-aa69-61e6c36db347"
+                                    },
+                                    "valueCoded": "e5e0461a-35c9-42f9-9a2b-7a66122d9d9d",
+                                    "valueCodedName": "HIVTC, One month supply",
+                                    "valueText": "1 month",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3730,
+                                        "uuid": "27d55083-5e66-4b5a-91d3-2c9a42cc9996"
+                                    },
+                                    "valueNumeric": 30,
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "512812d6-ccae-4739-8572-418ba3a55b62"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }            
+            ]
+        },
+        {
+            "encounterDatetime": "2024-01-01 08:30:00",
+            "encounterType":{
+                "uuid": "81852aee-3f10-11e4-adec-0800271c1b75"
+            },
+            "patient": {
+                "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
+            },
+            "location":{
+                "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+            },
+            "obs":[
+                {
+                    "concept": {
+                        "conceptId": 2403,
+                        "uuid": "746818ac-65a0-4d74-9609-ddb2c330a31b"
+                    },
+                    "obsDatetime": "2024-01-01 08:30:00",
+                    "person": "90ad98e3-967e-486e-81be-7341b5e708b3",
+                    "location": "bb4074a6-5eae-4797-a2d3-033d2fa74eed",
+                    "groupMembers": [
+                        {
+                            "concept": {
+                                "conceptId": 3753,
+                                "uuid": "65aa58be-3957-4c82-ad63-422637c8dd18"
+                            },
+                            "obsDatetime": "2024-01-01 08:30:00",
+                            "person": {
+                                "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
+                            },
+                            "location":{
+                                "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+                            },
+                            "groupMembers": [
+                                {
+                                    "concept": {
+                                        "conceptId": 3843,
+                                        "uuid": "e0bc761d-ac3b-4033-92c7-476304b9c5e8"
+                                    },
+                                    "valueCoded": "0f880c52-3ced-43ac-a79b-07a2740ae428",
+                                    "valueCodedName": "ART patient",
+                                    "valueText": "ART patient",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
+                                    },
+                                    "location":{
+                                        "uuid": "bb4074a6-5eae-4797-a2d3-033d2fa74eed"
+                                    } 
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3751,
+                                        "uuid": "ed064424-0331-47f6-9532-77156f40a014"
+                                    },
+                                    "valueCoded": "a2065636-5326-40f5-aed6-0cc2cca81ccc",
+                                    "valueCodedName": "Yes",
+                                    "valueText": "Yes",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3752,
+                                        "uuid": "88489023-783b-4021-b7a9-05ca9877bf67"
+                                    },
+                                    "valueDatetime": "2024-06-30 23:59:59",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 2250,
+                                        "uuid": "13382e01-9f18-488b-b2d2-58ab54c82d82"
+                                    },
+                                    "valueCoded": "225b0d93-d4b9-46b0-bbb2-1bce82c9107c",
+                                    "valueCodedName": "1j=TDF-3TC-DTG",
+                                    "valueDrug": "1j=TDF-3TC-DTG",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 4174,
+                                        "uuid": "9eb00622-1078-4f7b-aa69-61e6c36db347"
+                                    },
+                                    "valueCoded": "e5e0461a-35c9-42f9-9a2b-7a66122d9d9d",
+                                    "valueCodedName": "HIVTC, One month supply",
+                                    "valueText": "1 month",
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
+                                    }
+                                },
+                                {
+                                    "concept": {
+                                        "conceptId": 3730,
+                                        "uuid": "27d55083-5e66-4b5a-91d3-2c9a42cc9996"
+                                    },
+                                    "valueNumeric": 30,
+                                    "obsDatetime": "2024-01-01 08:30:00",
+                                    "person": {
+                                        "uuid": "90ad98e3-967e-486e-81be-7341b5e708b3"
                                     }
                                 }
                             ]
