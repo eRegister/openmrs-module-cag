@@ -2,7 +2,6 @@ package org.openmrs.module.cag.cag;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.*;
-import org.openmrs.annotation.AllowDirectAccess;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -10,7 +9,7 @@ import java.util.*;
 
 @Repository
 @Entity(name = "cag_encounter")
-@JsonIgnoreProperties({ "creator", "changedBy", "cagVisit", "attender", "encounters" })
+@JsonIgnoreProperties({ "creator", "changedBy", "cagVisit", "attender", "encounters", "location" })
 public class CagEncounter extends BaseOpenmrsData {
 	
 	@Id
@@ -44,9 +43,6 @@ public class CagEncounter extends BaseOpenmrsData {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinTable(name = "cag_encounter_encounter", joinColumns = { @JoinColumn(name = "cag_encounter_id") }, inverseJoinColumns = { @JoinColumn(name = "encounter_id") })
 	private Set<Encounter> encounters = new HashSet<Encounter>();
-	
-	@Transient
-	public String displayed;
 	
 	@Override
 	public Integer getId() {
@@ -98,10 +94,6 @@ public class CagEncounter extends BaseOpenmrsData {
 		this.location = location;
 	}
 	
-	public String getDisplayed() {
-		return displayed;
-	}
-	
 	public Cag getCag() {
 		return cag;
 	}
@@ -117,15 +109,4 @@ public class CagEncounter extends BaseOpenmrsData {
 	public void setCagVisit(CagVisit cagVisit) {
 		this.cagVisit = cagVisit;
 	}
-	
-	public void setDisplayed(String displayed) {
-		this.displayed = displayed;
-	}
-	
-	//	@Override
-	//	public String toString() {
-	//		return "CagEncounter{" + "id=" + id + ", cag=" + cag + ", cagVisit=" + cagVisit + ", location=" + location.getName()
-	//		        + ", attender=" + attender + ", cagEncounterDateTime=" + cagEncounterDateTime + ", nextEncounterDate="
-	//		        + nextEncounterDate + ", encounters=" + encounters + ", displayed='" + displayed + '\'' + '}';
-	//	}
 }
