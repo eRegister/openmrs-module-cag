@@ -36,6 +36,7 @@ simply restart OpenMRS/tomcat and the module will be loaded and started.
 * _Added DELETE endpoint to CAG Encounter._
 * _Added GET all CAG encounters endpoint._
 * _Added GET CAG Encounter by CAG uuid endpoint._
+* _Added retrospective CAG consultation functionality._
 
 
 
