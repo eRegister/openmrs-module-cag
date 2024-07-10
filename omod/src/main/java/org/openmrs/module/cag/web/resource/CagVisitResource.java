@@ -136,7 +136,7 @@ public class CagVisitResource extends DelegatingCrudResource<CagVisit> implement
 			description.addProperty("absentees");
 			description.addProperty("cag", Representation.REF);
 			description.addProperty("attender", Representation.REF);
-			description.addProperty("visits", Representation.REF);
+			description.addProperty("visits", Representation.FULL);
 			
 			description.addSelfLink();
 		} else {
@@ -149,7 +149,7 @@ public class CagVisitResource extends DelegatingCrudResource<CagVisit> implement
 			description.addProperty("absentees");
 			description.addProperty("cag", Representation.REF);
 			description.addProperty("attender", Representation.REF);
-			description.addProperty("visits", Representation.REF);
+			description.addProperty("visits", Representation.FULL);
 			
 			description.addLink("full", ".?v=full");
 		}
