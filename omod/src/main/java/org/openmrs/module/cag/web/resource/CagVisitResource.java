@@ -56,7 +56,7 @@ public class CagVisitResource extends DelegatingCrudResource<CagVisit> implement
 	public CagVisit getByUniqueId(String uuid) {
 		System.out.println("Get CagVisit By Uuid been called !!!");
 		CagVisit cagVisit = getService().getCagVisitByUuid(uuid);
-		System.out.println("Our cagVisit : " + cagVisit);
+		System.out.println("Our cagVisit is here : " + cagVisit);
 		
 		return cagVisit;
 	}

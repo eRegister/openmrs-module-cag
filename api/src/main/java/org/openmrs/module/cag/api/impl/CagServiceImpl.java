@@ -126,7 +126,9 @@ public class CagServiceImpl extends BaseOpenmrsService implements CagService {
 	@Override
 	public CagVisit openCagVisit(CagVisit cagVisit) {
 		cagVisit.setCreator(Context.getAuthenticatedUser());
+		cagVisit.setIsActive(true);
 		CagVisit savedCagVisit = dao.saveCagVisit(cagVisit);
+		
 		Map<String, String> absentees = cagVisit.getAbsentees();
 		
 		if (!absentees.isEmpty())
