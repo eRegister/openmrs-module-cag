@@ -31,16 +31,7 @@ simply restart OpenMRS/tomcat and the module will be loaded and started.
 
 ## Release Notes
 
-* _Added DELETE endpoint to CAG Visit._
-* _Added UPDATE endpoint to CAG Encounter._
-* _Added DELETE endpoint to CAG Encounter._
-* _Added GET all CAG encounters endpoint._
-* _Added GET CAG Encounter by CAG uuid endpoint._
-* _Added retrospective CAG consultation functionality._
-
-
-
-
+* _Added search cag by member(patient) endpoint to CAG._
 
 CAG Module endpoints
 ------------
@@ -111,6 +102,10 @@ POST http://localhost:8081/openmrs/ws/rest/v1/cag/{UUID}
 Retrieve specific CAG:
 
 ` GET http://localhost:8081/openmrs/ws/rest/v1/cag/{UUID}`
+
+Retrieve CAG By any Member:
+
+` GET http://localhost:8081/openmrs/ws/rest/v1/cag?patientuuid={UUID}&v={representation[full/ref/default]}`
 
 Retrieve All CAGs:
 
