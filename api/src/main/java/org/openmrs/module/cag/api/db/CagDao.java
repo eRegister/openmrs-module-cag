@@ -18,6 +18,8 @@ public interface CagDao {
 	
 	Cag getCagByUuid(String uuid);
 	
+	Cag getCagByPatientUuid(String uuid);
+	
 	Cag updateCag(Cag cag);
 	
 	CagPatient getCagPatientById(Integer cagPatientId);

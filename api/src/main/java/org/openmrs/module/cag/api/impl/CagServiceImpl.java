@@ -75,6 +75,19 @@ public class CagServiceImpl extends BaseOpenmrsService implements CagService {
 	}
 	
 	@Override
+	public Cag searchCagByMemberUuid(String uuid) {
+		
+		Cag searchedCag = this.dao.getCagByPatientUuid(uuid);
+		
+		if (searchedCag != null) {
+			List<Patient> patients = this.dao.getAllCagPatients(searchedCag.getId());
+			searchedCag.setCagPatientList(patients);
+		}
+		
+		return this.dao.getCagByPatientUuid(uuid);
+	}
+	
+	@Override
 	public List<Patient> getCagAllPatients(Integer cagId) {
 		return dao.getAllCagPatients(cagId);
 	}

@@ -20,6 +20,8 @@ public interface CagService extends OpenmrsService {
 	
 	CagPatient getCagPatientById(Integer cagPatientId);
 	
+	Cag searchCagByMemberUuid(String uuid);
+	
 	List<Patient> getCagAllPatients(Integer id);
 	
 	Patient saveCagPatient(CagPatient cagPatient);
