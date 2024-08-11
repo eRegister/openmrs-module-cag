@@ -61,6 +61,19 @@ public class HibernateCagDao implements CagDao {
 	}
 	
 	@Override
+	public Cag getCagByPatientUuid(String uuid) {
+		Transaction tx = getSession().beginTransaction();
+		Query query = getSession().createQuery("from cag_patient cp where cp.uuid=:uuid and cp.status=1");
+		query.setString("uuid", uuid);
+		CagPatient cagPatient = (CagPatient) query.uniqueResult();
+		
+		if (!tx.wasCommitted())
+			tx.commit();
+		
+		return (cagPatient != null) ? cagPatient.getCag() : null;
+	}
+	
+	@Override
 	public Cag updateCag(Cag cag) {
 		Transaction tx = getSession().beginTransaction();
 		Query query = getSession().createQuery(

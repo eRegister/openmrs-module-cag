@@ -4,6 +4,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cag.api.CagService;
 import org.openmrs.module.cag.cag.Cag;
+import org.openmrs.module.cag.cag.CagVisit;
 import org.openmrs.module.cag.web.controller.CagController;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -22,6 +23,9 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Resource(name = RestConstants.VERSION_1 + CagController.CAG_NAMESPACE, supportedClass = Cag.class, supportedOpenmrsVersions = {
@@ -149,6 +153,17 @@ public class CagResource extends DelegatingCrudResource<Cag> implements Updatabl
 	protected PageableResult doGetAll(RequestContext context) throws ResponseException {
 		
 		return new NeedsPaging<Cag>(getService().getAllCags(), context);
+	}
+	
+	@Override
+	protected PageableResult doSearch(RequestContext context) {
+		String patientUuid = context.getParameter("patientuuid");
+		
+		System.out.println("uuid : " + patientUuid);
+		
+		Cag searchedCag = getService().searchCagByMemberUuid(patientUuid);
+		
+		return new NeedsPaging<Cag>(new ArrayList<Cag>(Collections.singletonList(searchedCag)), context);
 	}
 	
 	private CagService getService() {
