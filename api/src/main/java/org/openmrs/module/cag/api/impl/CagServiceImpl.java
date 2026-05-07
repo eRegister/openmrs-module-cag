@@ -15,12 +15,14 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.cag.api.CagService;
 import org.openmrs.module.cag.api.db.CagDao;
 import org.openmrs.module.cag.cag.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+@Transactional
 public class CagServiceImpl extends BaseOpenmrsService implements CagService {
 	
 	private CagDao dao;
@@ -49,10 +51,17 @@ public class CagServiceImpl extends BaseOpenmrsService implements CagService {
 	@Override
 	public void saveCag(Cag cag) {
 		cag.setCreator(Context.getAuthenticatedUser());
+		cag.setDateCreated(new Date());
 		cag.setVoided(false);
+		if (cag.getUuid() == null) {
+			cag.setUuid(UUID.randomUUID().toString());
+		}
 		dao.saveCag(cag);
 		List<Patient> patients = cag.getCagPatientList();
 		
+		if (patients == null) {
+			return;
+		}
 		for (Patient currentPatient : patients) {
 			CagPatient newCagPatient = new CagPatient();
 			newCagPatient.setCag(cag);
