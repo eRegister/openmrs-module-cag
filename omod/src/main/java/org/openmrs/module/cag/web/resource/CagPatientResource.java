@@ -17,7 +17,8 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 @Resource(name = RestConstants.VERSION_1 + CagController.CAG_PATIENT_NAMESPACE, supportedClass = CagPatient.class, supportedOpenmrsVersions = {
-        "1.8.*", "2.1.*", "2.4.*" })
+        "1.8.*", "1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*", "2.3.*", "2.4.*", "2.5.*", "2.6.*",
+        "2.7.*" })
 public class CagPatientResource extends DelegatingCrudResource<CagPatient> {
 	
 	@Override
@@ -77,7 +78,6 @@ public class CagPatientResource extends DelegatingCrudResource<CagPatient> {
 			description.addProperty("uuid");
 			description.addProperty("patient", Representation.REF);
 			description.addProperty("cag", Representation.REF);
-			description.addProperty("uuid");
 			
 			description.addSelfLink();
 			description.addLink("full", ".?v=full");
@@ -87,17 +87,16 @@ public class CagPatientResource extends DelegatingCrudResource<CagPatient> {
 			description.addProperty("uuid");
 			description.addProperty("patient", Representation.REF);
 			description.addProperty("cag", Representation.REF);
-			description.addProperty("uuid");
 			
 			description.addSelfLink();
 		} else {
+			description = new DelegatingResourceDescription();
 			
 			description.addProperty("uuid");
 			description.addProperty("patient", Representation.REF);
 			description.addProperty("cag", Representation.REF);
-			description.addProperty("uuid");
 			
-			description.addSelfLink();
+			description.addLink("full", ".?v=full");
 		}
 		
 		return description;

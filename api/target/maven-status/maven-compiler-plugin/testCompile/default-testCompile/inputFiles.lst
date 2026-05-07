@@ -1,5 +1,5 @@
-/home/ramohlongoana/Documents/Workspace/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/cag/CagPatientTest.java
-/home/ramohlongoana/Documents/Workspace/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/cag/CagTest.java
-/home/ramohlongoana/Documents/Workspace/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/api/CagServiceTest.java
-/home/ramohlongoana/Documents/Workspace/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/api/db/hibernate/HibernateCagDaoTest.java
-/home/ramohlongoana/Documents/Workspace/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/api/impl/CagServiceImplTest.java
+/Users/kgatman/bahmniDev/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/api/CagServiceTest.java
+/Users/kgatman/bahmniDev/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/api/db/hibernate/HibernateCagDaoTest.java
+/Users/kgatman/bahmniDev/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/api/impl/CagServiceImplTest.java
+/Users/kgatman/bahmniDev/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/cag/CagPatientTest.java
+/Users/kgatman/bahmniDev/openmrs-module-cag/api/src/test/java/org/openmrs/module/cag/cag/CagTest.java

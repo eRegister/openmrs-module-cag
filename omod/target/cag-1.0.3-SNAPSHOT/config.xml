@@ -5,7 +5,7 @@
 	<!-- Base Module Properties -->
 	<id>cag</id>
 	<name>Community ART Groups Module</name>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<package>org.openmrs.module.cag</package>
 	<author>ICAP</author>
 	<description>

@@ -24,7 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Resource(name = RestConstants.VERSION_1 + CagController.CAG_ENCOUNTER_NAMESPACE, supportedClass = CagEncounter.class, supportedOpenmrsVersions = {
-        "1.8.*", "2.1.*", "2.4.*" })
+        "1.8.*", "1.9.*", "1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*", "2.3.*", "2.4.*", "2.5.*", "2.6.*",
+        "2.7.*" })
 public class CagEncounterResource extends DelegatingCrudResource<CagEncounter> {
 	
 	@Override
